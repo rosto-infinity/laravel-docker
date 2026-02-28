@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+    web:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: laravel-docker  
+        ports:
+            - "8000:80"
+        volumes:
+            - .:/var/www/html
+            - /var/www/html/storage
+            - /var/www/html/bootstrap/cache
+            - ./.docker/apache/default.config:/etc/apache2/sites-available/000-default.conf 
+        working_dir: /var/www/html
+        user: "www-data"
+        depends_on: 
+            - db
+    db:
+        image: mysql:8.0
+        environment:
+            MYSQL_DATABASE: laravel_docker
+            MYSQL_USER: laravel_docker
+            MYSQL_PASSWORD: "docker"
+            MYSQL_ROOT_PASSWORD: "root"
+        volumes:
+            - dbase:/var/lib/mysql
+volumes:
+    dbase:
+
+        
